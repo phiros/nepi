@@ -1,5 +1,5 @@
 from nepi.execution.resource import ResourceManager, clsinit_copy, \
-     ResourceState, reschedule_delay
+     ResourceState
 from nepi.resources.iotlab.node import IOTLABNode
 from nepi.execution.attribute import Attribute, Flags
 from nepi.resources.iotlab.iotlab_api_factory import IOTLABAPIFactory
@@ -9,7 +9,7 @@ from nepi.resources.iotlab.iotlab_api_factory import IOTLABAPIFactory
 class IOTLABApplication(ResourceManager):
     """
     .. class:: Class Args :
-      
+
         :param ec: The Experiment controller
         :type ec: ExperimentController
         :param guid: guid of the RM
@@ -30,7 +30,7 @@ class IOTLABApplication(ResourceManager):
         	flags = Flags.Design)
         cls._register_attribute(command)
         cls._register_attribute(firmware_path)
-        
+
     def __init__(self, ec, guid):
         """
         :param ec: The Experiment controller
@@ -58,14 +58,14 @@ class IOTLABApplication(ResourceManager):
         if not node or node.state < ResourceState.READY:
             self.debug("---- RESCHEDULING DEPLOY ---- node state %s "
                        % node.state )
-            self.ec.schedule(reschedule_delay, self.deploy)
-        else: 
+            self.ec.schedule(self.reschedule_delay, self.deploy)
+        else:
             if not self.get('command'):
             	msg = "Command is not initialized."
             	self.error(msg)
             	raise RuntimeError(msg)
 
-            if (self.get('command') == 'update' and 
+            if (self.get('command') == 'update' and
             	not self.get('firmware_path')):
             	msg = "Firmware path is not initialized."
             	self.error(msg)
@@ -79,7 +79,7 @@ class IOTLABApplication(ResourceManager):
 
     def do_start(self):
         """ Start the RM. It means : Send REST Request to execute
-        command. 
+        command.
         """
         if self.get('command') == 'update':
             self._rest_api.update(self.get('firmware_path'))
@@ -95,5 +95,3 @@ class IOTLABApplication(ResourceManager):
             raise RuntimeError(msg)
 
         super(IOTLABApplication, self).do_start()
-
-
