@@ -1,0 +1,5 @@
+new BUNNY broadcast enabled loop
+setup BUNNY input /home/inria_lguevgeo/.nepi/nepi-usr/src/big_buck_bunny_240p_mpeg4_lq.ts
+setup BUNNY output #rtp{access=udp,mux=ts,sdp=rtsp://0.0.0.0:8554/BUNNY}
+new test_sched schedule enabled
+setup test_sched append control BUNNY play

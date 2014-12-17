@@ -1,0 +1,71 @@
+Some notes about the OMF 6 performance test
+==================================================
+
+To plot some graph, the plot_omf6.py can take the number of nodes as a parameter. 
+Indeed, in OMF, each resource has a different cost in term of time. An application
+ take really much time than a node, especially when many others application are
+ running. Therefore, 1 node with 50 applications can not be really compared with
+ 25 nodes and 1 applications (the total number of resources will be the same).
+
+For example :
+
+python plot_omf6.py -n 10 -f file.data
+
+It will show you for a same numer of node, the time that it takes to run 
+X applications. X is usually 1, 5, 10, 30, or 50. It can be easuly compute with 
+the total number of resources :
+
+nb_apps = ( nb_of_resources - 2 * nb_of_nodes - 1 ) / nb_of_nodes 
+
+
+
+Some notes about the results :
+-----------------------------------
+
+We can sum up that when the total number of applications is more than 100, the 
+XMPP Server starts to have difficulties to manage all the messages (Quite weird 
+when you know that jabber is used for chatting with many persons). The 
+confirmation time start to be really long and sometimes, some messages are never 
+received.
+
+It is quite hard to investigate this as we don't have the right in the XMPP 
+Server and the OMF team advices to move forward to AMQP that seems to be really 
+better.
+
+Moreover, when we run more than 100 applications on one node, the omf_rc has a 
+segmentation fault. OMF Team says that it comes from openfire and this problem 
+should be solved with AQMP.
+
+
+My personnal opinion about the graphs :
+-----------------------------------------
+
+I gathered some resultst in order to have more data :
+$ touch omf6_scalability_benchmark_final.data
+$ cat omf6_scalability_benchmark_rev_854749e23857_20140922.data >> omf6_scalability_benchmark_final.data
+$ cat omf6_scalability_benchmark_rev_981606b63b05_20140903.data >> omf6_scalability_benchmark_final.data
+
+* For 1 node :  
+    - python plot_omf6.py -n 1 -f omf6_scalability_benchmark_final.data
+    - Resultst are nice and we can see that too many thread overload system. 
+
+* For 5 nodes : 
+    - python plot_omf6.py -n 5 -f omf6_scalability_benchmark_final.data
+    - Weird for 100 hundreds with many applications but we can still see 
+      that 10 and 50 threads are better
+
+* For 10 nodes :
+    - python plot_omf6.py -n 10 -f omf6_scalability_benchmark_final.data
+    - 100 is missing but nice curves showing again the power of the thread. 
+      No differences between 10 or 50.
+
+* For 25 nodes :
+    - python plot_omf6.py -n 25 -f omf6_scalability_benchmark_final.data
+    - It is a big mess and many values need to be delete to have a better average, 
+      The values are too much spread
+
+* For all the graph :
+    - python plot_omf6.py -f omf6_scalability_benchmark_final.data
+    - We can see that the number of resources is not so important depending on the
+      types of resources and how many applications by nodes. Interesting graphs
+      (It still need to be cleaned of some weird values)

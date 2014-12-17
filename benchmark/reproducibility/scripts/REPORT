@@ -1,0 +1,16 @@
+Time used to develop:
+--------------------
+
+NS3
+---
+
+ns3_csma_ping.cc  - 1 hour to develope and debug script - 11/12/2014 20:30 / 21:30
+
+DCE
+---
+
+dce_csma_ping.cc  - ~1hour - 11/12/2014 22:08 / 22:34 + 12/12/2014 12:38 / 13:23 
+                  - Difficulties: 
+                    * How to transform the IP address assigned to the nodes to a string ip that can be passes to the DCE application
+                    * Compilation of Ping binary for DCE with -rdynamic
+
